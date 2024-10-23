@@ -36,6 +36,7 @@ const LoginAdminPage = lazy(() => import("./pages/AdminPage/LoginPage"));
 const DeleteAccountPage = lazy(() => import("./pages/DeleteAccountPage"));
 
 const PlaygroundPage = lazy(() => import("./pages/Playground"));
+const KnowledgePage = lazy(() => import("./pages/Knowledge"));
 
 const SignUp = lazy(() => import("./pages/SignUpPage"));
 const router = createBrowserRouter(
@@ -163,6 +164,11 @@ const router = createBrowserRouter(
               </Route>
               <Route path="playground/:id/">
                 <Route path="" element={<PlaygroundPage />} />
+              </Route>
+              <Route path="knowledge">
+                <Route path="" element={<DashboardWrapperPage />}>
+                  <Route path="" element={<KnowledgePage />} />
+                </Route>
               </Route>
             </Route>
           </Route>

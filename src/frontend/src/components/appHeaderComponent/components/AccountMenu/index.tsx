@@ -2,7 +2,10 @@ import { useLogout } from "@/controllers/API/queries/auth";
 import { CustomFeedbackDialog } from "@/customization/components/custom-feedback-dialog";
 import { CustomHeaderMenuItemsTitle } from "@/customization/components/custom-header-menu-items-title";
 import { CustomProfileIcon } from "@/customization/components/custom-profile-icon";
-import { ENABLE_DATASTAX_LANGFLOW } from "@/customization/feature-flags";
+import {
+  ENABLE_DATASTAX_LANGFLOW,
+  ENABLE_SOCIAL_LINKS,
+} from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useAuthStore from "@/stores/authStore";
 import { useDarkStore } from "@/stores/darkStore";
@@ -86,32 +89,37 @@ export const AccountMenu = () => {
               </HeaderMenuItemLink>
             )}
           </HeaderMenuItemsSection>
-          <HeaderMenuItemsSection>
-            {ENABLE_DATASTAX_LANGFLOW ? (
+          {ENABLE_SOCIAL_LINKS && (
+            <HeaderMenuItemsSection>
+              {ENABLE_DATASTAX_LANGFLOW ? (
+                <HeaderMenuItemLink
+                  newPage
+                  href="https://github.com/langflow-ai/langflow"
+                >
+                  <div className="-my-2 mr-2 flex w-full items-center justify-between">
+                    <div className="text-sm">Star the repo</div>
+                    <GithubStarComponent />
+                  </div>
+                </HeaderMenuItemLink>
+              ) : (
+                <HeaderMenuItemLink
+                  newPage
+                  href="https://github.com/langflow-ai/langflow/discussions"
+                >
+                  Share Feedback on Github
+                </HeaderMenuItemLink>
+              )}
               <HeaderMenuItemLink
                 newPage
-                href="https://github.com/langflow-ai/langflow"
+                href="https://twitter.com/langflow_ai"
               >
-                <div className="-my-2 mr-2 flex w-full items-center justify-between">
-                  <div className="text-sm">Star the repo</div>
-                  <GithubStarComponent />
-                </div>
+                Follow {ENABLE_DATASTAX_LANGFLOW ? "Langflow" : "us"} on X
               </HeaderMenuItemLink>
-            ) : (
-              <HeaderMenuItemLink
-                newPage
-                href="https://github.com/langflow-ai/langflow/discussions"
-              >
-                Share Feedback on Github
+              <HeaderMenuItemLink newPage href="https://discord.gg/EqksyE2EX9">
+                Join our Discord
               </HeaderMenuItemLink>
-            )}
-            <HeaderMenuItemLink newPage href="https://twitter.com/langflow_ai">
-              Follow {ENABLE_DATASTAX_LANGFLOW ? "Langflow" : "us"} on X
-            </HeaderMenuItemLink>
-            <HeaderMenuItemLink newPage href="https://discord.gg/EqksyE2EX9">
-              Join our Discord
-            </HeaderMenuItemLink>
-          </HeaderMenuItemsSection>
+            </HeaderMenuItemsSection>
+          )}
           <HeaderMenuItemsSection>
             {ENABLE_DATASTAX_LANGFLOW ? (
               <HeaderMenuItemLink href="/session/logout">

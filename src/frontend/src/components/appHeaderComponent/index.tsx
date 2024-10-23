@@ -4,11 +4,14 @@ import { CustomOrgSelector } from "@/customization/components/custom-org-selecto
 import { CustomProductSelector } from "@/customization/components/custom-product-selector";
 import {
   ENABLE_DATASTAX_LANGFLOW,
+  ENABLE_LANGFLOW_STORE,
   ENABLE_NEW_LOGO,
+  ENABLE_SOCIAL_LINKS,
 } from "@/customization/feature-flags";
 import { useCustomNavigate } from "@/customization/hooks/use-custom-navigate";
 import useTheme from "@/customization/hooks/use-custom-theme";
 import useAlertStore from "@/stores/alertStore";
+import useFlowStore from "@/stores/flowStore";
 import ForwardedIconComponent from "../genericIconComponent";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
@@ -21,12 +24,13 @@ import GithubStarComponent from "./components/GithubStarButton";
 export default function AppHeader(): JSX.Element {
   const notificationCenter = useAlertStore((state) => state.notificationCenter);
   const navigate = useCustomNavigate();
+  const onFlowPage = useFlowStore((state) => state.onFlowPage);
   useTheme();
 
   return (
     <div className="relative flex items-center border-b px-4 py-1.5 dark:bg-black">
       {/* Left Section */}
-      <div className="flex w-full items-center gap-2 lg:max-w-[475px]">
+      <div className="flex items-center gap-2 lg:max-w-[675px]">
         <Button
           unstyled
           onClick={() => navigate("/")}
@@ -50,13 +54,27 @@ export default function AppHeader(): JSX.Element {
       </div>
 
       {/* Middle Section */}
-      <div className="mx-auto flex items-center px-5">
+      <div className="mx-auto flex items-center gap-2 px-5">
         <FlowMenu />
+        {onFlowPage && (
+          <Separator
+            orientation="vertical"
+            className="h-7 dark:border-zinc-700"
+          />
+        )}
+        <Button
+          unstyled
+          onClick={() => navigate("/knowledge")}
+          className="flex h-8 w-8 items-center font-normal text-zinc-500 dark:text-zinc-400"
+          data-testid="icon-ChevronLeft"
+        >
+          Knowledge
+        </Button>
       </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-2">
-        {!ENABLE_DATASTAX_LANGFLOW && (
+        {!ENABLE_DATASTAX_LANGFLOW && ENABLE_SOCIAL_LINKS && (
           <>
             <Button
               unstyled
@@ -90,20 +108,22 @@ export default function AppHeader(): JSX.Element {
         </AlertDropdown>
         {!ENABLE_DATASTAX_LANGFLOW && (
           <>
-            <ShadTooltip content="Store" side="bottom">
-              <Button
-                variant="ghost"
-                className="flex items-center text-sm font-medium"
-                onClick={() => navigate("/store")}
-                data-testid="button-store"
-              >
-                <ForwardedIconComponent
-                  name="Store"
-                  className="side-bar-button-size"
-                />
-                Store
-              </Button>
-            </ShadTooltip>
+            {ENABLE_LANGFLOW_STORE && (
+              <ShadTooltip content="Store" side="bottom">
+                <Button
+                  variant="ghost"
+                  className="flex items-center text-sm font-medium"
+                  onClick={() => navigate("/store")}
+                  data-testid="button-store"
+                >
+                  <ForwardedIconComponent
+                    name="Store"
+                    className="side-bar-button-size"
+                  />
+                  Store
+                </Button>
+              </ShadTooltip>
+            )}
             <Separator
               orientation="vertical"
               className="h-7 dark:border-zinc-700"
